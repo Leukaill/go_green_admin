@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Supabase Auth</title>
+</head>
+<body>
+    <h1>Test Supabase Authentication</h1>
+    <button onclick="testAuth()">Test Auth</button>
+    <button onclick="testUpdate()">Test Update</button>
+    <pre id="output"></pre>
+
+    <script type="module">
+        // Copy your Supabase URL and anon key from .env.local
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+        
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        window.testAuth = async function() {
+            const output = document.getElementById('output');
+            output.textContent = 'Testing authentication...\n';
+            
+            // Get session
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            output.textContent += '\n=== SESSION ===\n';
+            output.textContent += JSON.stringify(session, null, 2);
+            
+            // Get user
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+            output.textContent += '\n\n=== USER ===\n';
+            output.textContent += JSON.stringify(user, null, 2);
+            
+            if (!user) {
+                output.textContent += '\n\n❌ NOT AUTHENTICATED!';
+            } else {
+                output.textContent += '\n\n✅ AUTHENTICATED as: ' + user.email;
+            }
+        };
+        
+        window.testUpdate = async function() {
+            const output = document.getElementById('output');
+            output.textContent = 'Testing UPDATE...\n';
+            
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .update({ title: 'Test Update ' + new Date().toISOString() })
+                .eq('id', '59c81891-043c-441c-8f8c-b41068baca21')
+                .select();
+            
+            output.textContent += '\n=== UPDATE RESULT ===\n';
+            output.textContent += 'Data: ' + JSON.stringify(data, null, 2);
+            output.textContent += '\nError: ' + JSON.stringify(error, null, 2);
+            
+            if (!data || data.length === 0) {
+                output.textContent += '\n\n❌ UPDATE RETURNED 0 ROWS';
+                output.textContent += '\nThis means RLS is blocking or session is invalid';
+            } else {
+                output.textContent += '\n\n✅ UPDATE WORKED!';
+            }
+        };
+    </script>
+</body>
+</html>

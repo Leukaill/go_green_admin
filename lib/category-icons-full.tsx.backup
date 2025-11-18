@@ -1,0 +1,172 @@
+import {
+  Leaf, Apple, Carrot, Cherry, Grape, 
+  Banana, Salad, Sprout, Wheat, Milk, Egg, Fish, Beef,
+  Pizza, Coffee, Cookie, IceCream, Cake, Candy, Wine, Beer,
+  Soup, Sandwich, Drumstick, Ham, Croissant, Popcorn,
+  Flame, Snowflake, Sun, Moon, Star, Heart, Gift, Award,
+  Package, ShoppingBag, ShoppingCart, Store, Warehouse, Factory,
+  Truck, Plane, Ship, Train, Car, Bike, Rocket, Zap,
+  Droplet, Wind, Cloud, Umbrella, TreePine, Flower2, Palmtree,
+  Mountain, Waves, Globe, MapPin, Compass, Navigation,
+  Sparkles, Crown, Diamond, Gem, Shield, Lock, Key, Tag,
+  Percent, DollarSign, CreditCard, Wallet, PiggyBank, TrendingUp,
+  BarChart, PieChart, Activity, Target, Flag, Bookmark,
+  Calendar, Clock, Timer, Hourglass, Bell,
+  Camera, Image, Video, Music, Headphones, Mic,
+  Book, BookOpen, FileText, Newspaper, Mail, MessageCircle,
+  Phone, Smartphone, Tablet, Monitor, Laptop, Printer,
+  Settings, Wrench, Hammer, Scissors, Paintbrush,
+  Palette, Brush, Pen, Pencil, Ruler,
+  Archive, Folder, FolderOpen, File, Files, Database,
+  Server, HardDrive, Cpu, Battery, Plug, Power,
+  Wifi, Bluetooth, Radio, Signal, Antenna, Satellite,
+  Users, User, UserPlus, UserCheck, UserX, UserCog,
+  Home, Building, Building2, School, Hospital, Church,
+  Trees, Flower, Bug, Bird, Cat, Dog, Rabbit, Squirrel,
+  Feather, Footprints, Shell, Bone, Pill,
+  Syringe, Thermometer, Stethoscope, Bandage, Smile,
+  Frown, Meh, Laugh, ThumbsUp, ThumbsDown, Eye,
+  EyeOff, Search, Filter, SortAsc, SortDesc, List,
+  Grid, Columns, Rows, Layout, Maximize, Minimize,
+  Plus, Minus, X, Check, CheckCircle, XCircle,
+  AlertCircle, AlertTriangle, Info, HelpCircle, ChevronRight, ChevronLeft
+} from 'lucide-react';
+
+export interface CategoryIcon {
+  name: string;
+  component: any;
+  label: string;
+  category: 'food' | 'produce' | 'drinks' | 'nature' | 'business' | 'tech' | 'general';
+}
+
+export const categoryIcons: CategoryIcon[] = [
+  // Food & Produce
+  { name: 'Leaf', component: Leaf, label: 'Leaf (Vegetables)', category: 'produce' },
+  { name: 'Apple', component: Apple, label: 'Apple (Fruits)', category: 'produce' },
+  { name: 'Carrot', component: Carrot, label: 'Carrot (Root Vegetables)', category: 'produce' },
+  { name: 'Cherry', component: Cherry, label: 'Cherry (Berries)', category: 'produce' },
+  { name: 'Grape', component: Grape, label: 'Grape (Fruits)', category: 'produce' },
+  { name: 'Banana', component: Banana, label: 'Banana (Tropical Fruits)', category: 'produce' },
+  { name: 'Salad', component: Salad, label: 'Salad (Leafy Greens)', category: 'produce' },
+  { name: 'Sprout', component: Sprout, label: 'Sprout (Herbs)', category: 'produce' },
+  { name: 'Wheat', component: Wheat, label: 'Wheat (Grains)', category: 'produce' },
+  
+  // Dairy & Protein
+  { name: 'Milk', component: Milk, label: 'Milk (Dairy)', category: 'food' },
+  { name: 'Egg', component: Egg, label: 'Egg (Protein)', category: 'food' },
+  { name: 'Fish', component: Fish, label: 'Fish (Seafood)', category: 'food' },
+  { name: 'Beef', component: Beef, label: 'Beef (Meat)', category: 'food' },
+  { name: 'Drumstick', component: Drumstick, label: 'Drumstick (Poultry)', category: 'food' },
+  { name: 'Ham', component: Ham, label: 'Ham (Deli)', category: 'food' },
+  
+  // Prepared Foods
+  { name: 'Pizza', component: Pizza, label: 'Pizza (Fast Food)', category: 'food' },
+  { name: 'Sandwich', component: Sandwich, label: 'Sandwich (Meals)', category: 'food' },
+  { name: 'Soup', component: Soup, label: 'Soup (Hot Meals)', category: 'food' },
+  { name: 'Croissant', component: Croissant, label: 'Croissant (Bakery)', category: 'food' },
+  { name: 'Popcorn', component: Popcorn, label: 'Popcorn (Snacks)', category: 'food' },
+  
+  // Desserts & Sweets
+  { name: 'Cookie', component: Cookie, label: 'Cookie (Baked Goods)', category: 'food' },
+  { name: 'Cake', component: Cake, label: 'Cake (Desserts)', category: 'food' },
+  { name: 'IceCream', component: IceCream, label: 'Ice Cream (Frozen)', category: 'food' },
+  { name: 'Candy', component: Candy, label: 'Candy (Sweets)', category: 'food' },
+  
+  // Beverages
+  { name: 'Coffee', component: Coffee, label: 'Coffee (Hot Drinks)', category: 'drinks' },
+  { name: 'Wine', component: Wine, label: 'Wine (Alcoholic)', category: 'drinks' },
+  { name: 'Beer', component: Beer, label: 'Beer (Alcoholic)', category: 'drinks' },
+  { name: 'Droplet', component: Droplet, label: 'Droplet (Water/Juice)', category: 'drinks' },
+  
+  // Nature & Environment
+  { name: 'TreePine', component: TreePine, label: 'Tree (Forest Products)', category: 'nature' },
+  { name: 'Flower2', component: Flower2, label: 'Flower (Florals)', category: 'nature' },
+  { name: 'Palmtree', component: Palmtree, label: 'Palm Tree (Tropical)', category: 'nature' },
+  { name: 'Trees', component: Trees, label: 'Trees (Forestry)', category: 'nature' },
+  { name: 'Flower', component: Flower, label: 'Flower (Garden)', category: 'nature' },
+  { name: 'Bug', component: Bug, label: 'Bug (Insects)', category: 'nature' },
+  { name: 'Bird', component: Bird, label: 'Bird (Poultry/Pets)', category: 'nature' },
+  { name: 'Cat', component: Cat, label: 'Cat (Pets)', category: 'nature' },
+  { name: 'Dog', component: Dog, label: 'Dog (Pets)', category: 'nature' },
+  { name: 'Rabbit', component: Rabbit, label: 'Rabbit (Small Animals)', category: 'nature' },
+  
+  // Business & Commerce
+  { name: 'Package', component: Package, label: 'Package (Products)', category: 'business' },
+  { name: 'ShoppingBag', component: ShoppingBag, label: 'Shopping Bag (Retail)', category: 'business' },
+  { name: 'ShoppingCart', component: ShoppingCart, label: 'Shopping Cart (E-commerce)', category: 'business' },
+  { name: 'Store', component: Store, label: 'Store (Shop)', category: 'business' },
+  { name: 'Warehouse', component: Warehouse, label: 'Warehouse (Storage)', category: 'business' },
+  { name: 'Factory', component: Factory, label: 'Factory (Manufacturing)', category: 'business' },
+  { name: 'Tag', component: Tag, label: 'Tag (Labels)', category: 'business' },
+  { name: 'Percent', component: Percent, label: 'Percent (Discounts)', category: 'business' },
+  { name: 'DollarSign', component: DollarSign, label: 'Dollar (Premium)', category: 'business' },
+  { name: 'TrendingUp', component: TrendingUp, label: 'Trending Up (Popular)', category: 'business' },
+  { name: 'Award', component: Award, label: 'Award (Premium)', category: 'business' },
+  { name: 'Crown', component: Crown, label: 'Crown (Luxury)', category: 'business' },
+  { name: 'Diamond', component: Diamond, label: 'Diamond (Premium)', category: 'business' },
+  { name: 'Gem', component: Gem, label: 'Gem (Valuable)', category: 'business' },
+  { name: 'Gift', component: Gift, label: 'Gift (Special)', category: 'business' },
+  
+  // Weather & Elements
+  { name: 'Flame', component: Flame, label: 'Flame (Hot/Spicy)', category: 'general' },
+  { name: 'Snowflake', component: Snowflake, label: 'Snowflake (Frozen)', category: 'general' },
+  { name: 'Sun', component: Sun, label: 'Sun (Summer/Fresh)', category: 'general' },
+  { name: 'Moon', component: Moon, label: 'Moon (Night)', category: 'general' },
+  { name: 'Star', component: Star, label: 'Star (Featured)', category: 'general' },
+  { name: 'Sparkles', component: Sparkles, label: 'Sparkles (New)', category: 'general' },
+  { name: 'Wind', component: Wind, label: 'Wind (Fresh)', category: 'general' },
+  { name: 'Cloud', component: Cloud, label: 'Cloud (Soft)', category: 'general' },
+  { name: 'Umbrella', component: Umbrella, label: 'Umbrella (Protection)', category: 'general' },
+  
+  // Location & Geography
+  { name: 'Globe', component: Globe, label: 'Globe (International)', category: 'general' },
+  { name: 'MapPin', component: MapPin, label: 'Map Pin (Local)', category: 'general' },
+  { name: 'Compass', component: Compass, label: 'Compass (Navigation)', category: 'general' },
+  { name: 'Mountain', component: Mountain, label: 'Mountain (Highland)', category: 'general' },
+  { name: 'Waves', component: Waves, label: 'Waves (Coastal)', category: 'general' },
+  
+  // Health & Wellness
+  { name: 'Heart', component: Heart, label: 'Heart (Healthy)', category: 'general' },
+  { name: 'Pill', component: Pill, label: 'Pill (Supplements)', category: 'general' },
+  { name: 'Thermometer', component: Thermometer, label: 'Thermometer (Temperature)', category: 'general' },
+  { name: 'Shield', component: Shield, label: 'Shield (Protected)', category: 'general' },
+  
+  // General Purpose
+  { name: 'Zap', component: Zap, label: 'Zap (Energy)', category: 'general' },
+  { name: 'Target', component: Target, label: 'Target (Focus)', category: 'general' },
+  { name: 'Flag', component: Flag, label: 'Flag (Featured)', category: 'general' },
+  { name: 'Bookmark', component: Bookmark, label: 'Bookmark (Saved)', category: 'general' },
+  { name: 'CheckCircle', component: CheckCircle, label: 'Check Circle (Verified)', category: 'general' },
+  { name: 'ThumbsUp', component: ThumbsUp, label: 'Thumbs Up (Recommended)', category: 'general' },
+];
+
+// Helper function to get icon component by name
+export function getIconComponent(iconName: string) {
+  const icon = categoryIcons.find(i => i.name === iconName);
+  return icon?.component || Package;
+}
+
+// Helper function to get icon label by name
+export function getIconLabel(iconName: string) {
+  const icon = categoryIcons.find(i => i.name === iconName);
+  return icon?.label || iconName;
+}
+
+// Group icons by category
+export function getIconsByCategory() {
+  const grouped: Record<string, CategoryIcon[]> = {
+    produce: [],
+    food: [],
+    drinks: [],
+    nature: [],
+    business: [],
+    tech: [],
+    general: [],
+  };
+  
+  categoryIcons.forEach(icon => {
+    grouped[icon.category].push(icon);
+  });
+  
+  return grouped;
+}
