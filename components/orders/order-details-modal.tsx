@@ -250,7 +250,7 @@ export function OrderDetailsModal({ order, onClose, onUpdate }: OrderDetailsModa
                   </div>
                   {history.note && (
                     <p className="text-sm text-gray-700 bg-gray-50 p-2 rounded italic">
-                      "{history.note}"
+                      &ldquo;{history.note}&rdquo;
                     </p>
                   )}
                 </div>

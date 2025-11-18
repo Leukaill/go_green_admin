@@ -20,6 +20,7 @@ import {
   type Order,
   type OrderStatus,
 } from '@/lib/supabase/orders';
+import { OrderDetailsModal } from '@/components/orders/order-details-modal';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
