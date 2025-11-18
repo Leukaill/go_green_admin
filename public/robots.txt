@@ -1,0 +1,5 @@
+# robots.txt for Go Green Admin Panel
+# This admin panel should NOT be indexed by search engines
+
+User-agent: *
+Disallow: /
