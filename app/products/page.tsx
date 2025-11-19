@@ -17,7 +17,12 @@ import {
   Filter,
   Grid3x3,
   List,
-  Image as ImageIcon
+  Image as ImageIcon,
+  DollarSign,
+  Scale,
+  Layers,
+  X,
+  Upload
 } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -45,6 +50,8 @@ interface Product {
   category_id?: string;
   health_benefits?: string[];
   nutrition_facts?: { label: string; value: string }[];
+  unit_type?: 'weight' | 'piece' | 'bundle' | 'custom';
+  unit_options?: Array<{quantity: string; price: number}>;
   created_at: string;
   updated_at: string;
 }
@@ -77,6 +84,8 @@ export default function ProductsPage() {
     is_featured: false,
     health_benefits: '',
     nutrition_facts: '',
+    unit_type: 'weight' as 'weight' | 'piece' | 'bundle' | 'custom',
+    unit_options: [{quantity: '1kg', price: 0}] as Array<{quantity: string; price: number}>,
   });
   const [submitting, setSubmitting] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -238,6 +247,8 @@ export default function ProductsPage() {
       is_featured: false,
       health_benefits: '',
       nutrition_facts: '',
+      unit_type: 'weight',
+      unit_options: [{quantity: '1kg', price: 0}],
     });
     setImageFile(null);
     setImagePreview(null);
@@ -257,6 +268,8 @@ export default function ProductsPage() {
       is_featured: product.is_featured,
       health_benefits: product.health_benefits?.join('\n') || '',
       nutrition_facts: product.nutrition_facts?.map(nf => `${nf.label}: ${nf.value}`).join('\n') || '',
+      unit_type: product.unit_type || 'weight',
+      unit_options: product.unit_options || [{quantity: '1kg', price: 0}],
     });
     setImageFile(null);
     setImagePreview(null);
@@ -318,6 +331,8 @@ export default function ProductsPage() {
           is_available: true,
           health_benefits: healthBenefits.length > 0 ? healthBenefits : null,
           nutrition_facts: nutritionFacts.length > 0 ? nutritionFacts : null,
+          unit_type: formData.unit_type,
+          unit_options: formData.unit_options,
         });
 
       if (error) throw error;
@@ -389,6 +404,8 @@ export default function ProductsPage() {
           is_available: true,
           health_benefits: healthBenefits.length > 0 ? healthBenefits : null,
           nutrition_facts: nutritionFacts.length > 0 ? nutritionFacts : null,
+          unit_type: formData.unit_type,
+          unit_options: formData.unit_options,
         })
         .eq('id', editingProduct.id);
 
@@ -719,14 +736,17 @@ export default function ProductsPage() {
 
       {/* Add Product Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Add New Product</DialogTitle>
-            <DialogDescription>
-              Add a new product to your inventory
+        <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="pb-4 border-b">
+            <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+              <Package className="h-6 w-6 text-primary" />
+              Add New Product
+            </DialogTitle>
+            <DialogDescription className="text-base">
+              Fill in the details below to add a new product to your inventory
             </DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-1 gap-4 py-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-6">
             <div className="space-y-2">
               <Label htmlFor="name">Product Name *</Label>
               <Input
@@ -737,16 +757,6 @@ export default function ProductsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Product description"
-                rows={3}
-              />
-            </div>
-            <div className="space-y-2">
               <Label htmlFor="price">Price (RWF) *</Label>
               <Input
                 id="price"
@@ -754,41 +764,165 @@ export default function ProductsPage() {
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                 placeholder="2500"
+                className="text-lg font-semibold"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="category">Category *</Label>
-                <Select
-                  value={formData.category_id}
-                  onValueChange={(value) => setFormData({ ...formData, category_id: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => {
-                      const IconComponent = getIconComponent(cat.icon);
-                      return (
-                        <SelectItem key={cat.id} value={cat.id}>
-                          <div className="flex items-center gap-2">
-                            <IconComponent className="h-4 w-4" />
-                            {cat.name}
-                          </div>
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
+
+            {/* Description spans both columns */}
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Describe your product in detail..."
+                rows={3}
+                className="resize-none"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="category">Category *</Label>
+              <Select
+                value={formData.category_id}
+                onValueChange={(value) => setFormData({ ...formData, category_id: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((cat) => {
+                    const IconComponent = getIconComponent(cat.icon);
+                    return (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        <div className="flex items-center gap-2">
+                          <IconComponent className="h-4 w-4" />
+                          {cat.name}
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Unit Type Selector - Spans both columns */}
+            <div className="space-y-3 bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border-2 border-green-200 md:col-span-2 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <DollarSign className="h-5 w-5 text-green-600" />
+                <Label className="text-base font-semibold">How do you sell this product? *</Label>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="unit">Unit *</Label>
-                <Input
-                  id="unit"
-                  value={formData.unit}
-                  onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-                  placeholder="per kg"
-                />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFormData({...formData, unit_type: 'weight', unit_options: [{quantity: '1kg', price: parseFloat(formData.price) || 0}]})}
+                  className={`p-3 border-2 rounded-xl transition-all ${
+                    formData.unit_type === 'weight'
+                      ? 'border-green-600 bg-green-100'
+                      : 'border-gray-300 hover:border-green-400'
+                  }`}
+                >
+                  <Scale className="h-5 w-5 mx-auto mb-1" />
+                  <p className="text-xs font-medium">By Weight</p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({...formData, unit_type: 'piece', unit_options: [{quantity: '1 piece', price: parseFloat(formData.price) || 0}]})}
+                  className={`p-3 border-2 rounded-xl transition-all ${
+                    formData.unit_type === 'piece'
+                      ? 'border-green-600 bg-green-100'
+                      : 'border-gray-300 hover:border-green-400'
+                  }`}
+                >
+                  <Package className="h-5 w-5 mx-auto mb-1" />
+                  <p className="text-xs font-medium">By Piece</p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({...formData, unit_type: 'bundle', unit_options: [{quantity: '1 bundle', price: parseFloat(formData.price) || 0}]})}
+                  className={`p-3 border-2 rounded-xl transition-all ${
+                    formData.unit_type === 'bundle'
+                      ? 'border-green-600 bg-green-100'
+                      : 'border-gray-300 hover:border-green-400'
+                  }`}
+                >
+                  <Layers className="h-5 w-5 mx-auto mb-1" />
+                  <p className="text-xs font-medium">By Bundle</p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({...formData, unit_type: 'custom', unit_options: [{quantity: '1 unit', price: parseFloat(formData.price) || 0}]})}
+                  className={`p-3 border-2 rounded-xl transition-all ${
+                    formData.unit_type === 'custom'
+                      ? 'border-green-600 bg-green-100'
+                      : 'border-gray-300 hover:border-green-400'
+                  }`}
+                >
+                  <Edit className="h-5 w-5 mx-auto mb-1" />
+                  <p className="text-xs font-medium">Custom</p>
+                </button>
+              </div>
+
+              {/* Unit Options */}
+              <div className="space-y-2 mt-4">
+                <Label className="text-sm">Available Quantities *</Label>
+                {formData.unit_options.map((option, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Input
+                      value={option.quantity}
+                      onChange={(e) => {
+                        const newOptions = [...formData.unit_options];
+                        newOptions[index].quantity = e.target.value;
+                        setFormData({...formData, unit_options: newOptions});
+                      }}
+                      placeholder={
+                        formData.unit_type === 'weight' ? 'e.g., 1kg' :
+                        formData.unit_type === 'piece' ? 'e.g., 1 piece' :
+                        formData.unit_type === 'bundle' ? 'e.g., 1 bundle' :
+                        'e.g., 1 unit'
+                      }
+                      className="flex-1"
+                    />
+                    <Input
+                      type="number"
+                      value={option.price}
+                      onChange={(e) => {
+                        const newOptions = [...formData.unit_options];
+                        newOptions[index].price = parseFloat(e.target.value) || 0;
+                        setFormData({...formData, unit_options: newOptions});
+                      }}
+                      placeholder="Price"
+                      className="w-32"
+                    />
+                    {formData.unit_options.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                          const newOptions = formData.unit_options.filter((_, i) => i !== index);
+                          setFormData({...formData, unit_options: newOptions});
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setFormData({
+                      ...formData,
+                      unit_options: [...formData.unit_options, {quantity: '', price: 0}]
+                    });
+                  }}
+                  className="w-full"
+                  size="sm"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Quantity Option
+                </Button>
               </div>
             </div>
             <div className="space-y-2">
